@@ -1,2 +1,8 @@
 준비
-npm i recoil styled-components @types/styled-components react-router-dom@5.3 framer-motion react-query react-hook-form -S
+npm i recoil styled-components @types/styled-components 
+npm i framer-motion 
+npm i react-query 
+npm i react-hook-form
+npm i react-router-dom
+npm i router-dom
+npm i --save-dev @types/react-router-dom

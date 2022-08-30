@@ -1,9 +1,9 @@
+import App from './App';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { theme } from './theme';
 import { RecoilRoot } from 'recoil';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import App from './App';
-import { theme } from './theme';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -60,9 +60,9 @@ table {
 body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
-  background:linear-gradient(135deg,#e09,#d0e);
-  color:"black";
+  color:black;
   line-height: 1.2;
+  
 }
 a {
   text-decoration:none;
