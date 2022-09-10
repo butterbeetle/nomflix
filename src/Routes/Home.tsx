@@ -4,6 +4,7 @@ import { getMovies, IGetMoviesResult } from "../api";
 import { makeImagePath } from "../utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { useMatch, useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -23,8 +24,8 @@ const Banner = styled.div<{ bgPhoto: string }>`
   flex-direction: column;
   justify-content: center;
   padding: 60px;
-  background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1)), 
-  url(${props => props.bgPhoto});
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
+    url(${(props) => props.bgPhoto});
   background-size: cover;
 `;
 
@@ -53,7 +54,7 @@ const Row = styled(motion.div)`
 
 const Box = styled(motion.div) <{ bgPhoto: string }>`
   background-color: white;
-  background-image: url(${props => props.bgPhoto});
+  background-image: url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center center;
   height: 200px;
@@ -119,6 +120,8 @@ const infoVariants = {
 const offset = 6;
 
 function Home() {
+  const navigate = useNavigate();
+  const moviPathMatch = useMatch("/movies/:movieId");
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -135,13 +138,17 @@ function Home() {
     }
   };
   const toggleLeaving = () => setLeaving(prev => !prev);
+  const onBoxClicked = (movieId: number) => {
+    navigate(`/movies/${movieId}`)
+  }
   return (
     <Wrapper>
       {isLoading ? <Loader>Loading</Loader> :
         <>
           <Banner
             onClick={incraseIndex}
-            bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
+            bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
+          >
             <Title>{data?.results[0].title}</Title>
             <OverView>{data?.results[0].overview}</OverView>
           </Banner>
@@ -161,6 +168,8 @@ function Home() {
                 key={index}>
                 {data?.results.slice(1).slice(offset * index, offset * index + offset).map(movie =>
                   <Box
+                    layoutId={movie.id + ""}
+                    onClick={() => onBoxClicked(movie.id)}
                     key={movie.id}
                     whileHover="hover"
                     initial="normal"
@@ -178,6 +187,20 @@ function Home() {
               </Row>
             </AnimatePresence>
           </Slider>
+          <AnimatePresence>
+            {moviPathMatch ? <motion.div
+              layoutId={moviPathMatch.params.movieId}
+              style={{
+                position: "absolute",
+                width: "40vw",
+                height: "80vh",
+                backgroundColor: "red",
+                top: 50,
+                left: 0,
+                right: 0,
+                margin: "0 auto"
+              }} /> : null}
+          </AnimatePresence>
         </>}
     </Wrapper>
   );
