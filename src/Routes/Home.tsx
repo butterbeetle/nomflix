@@ -7,6 +7,7 @@ import { useState } from "react";
 
 const Wrapper = styled.div`
   background-color: black;
+  padding-bottom: 200px;
 `;
 
 const Loader = styled.div`
@@ -55,7 +56,14 @@ const Box = styled(motion.div) <{ bgPhoto: string }>`
   background-image: url(${props => props.bgPhoto});
   background-size: cover;
   background-position: center center;
-  height: 200px;
+  height: 150px;
+  width: 250px;
+  &:first-child{
+    transform-origin: center left;
+  }
+  &:last-child{
+    transform-origin: center right;
+  }
 `;
 
 const rowVariants = {
@@ -68,6 +76,21 @@ const rowVariants = {
   exit: {
     x: -window.outerWidth,
   },
+}
+
+const boxVariants = {
+  normal: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.4,
+    y: -50,
+    transition: {
+      delay: 0.5,
+      duration: 0.3,
+      type: "tween",
+    }
+  }
 }
 
 const offset = 6;
@@ -116,6 +139,12 @@ function Home() {
                 {data?.results.slice(1).slice(offset * index, offset * index + offset).map(movie =>
                   <Box
                     key={movie.id}
+                    whileHover="hover"
+                    initial="normal"
+                    variants={boxVariants}
+                    transition={{
+                      type: "tween",
+                    }}
                     bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
                   />
                 )}
